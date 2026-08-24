@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconcile — ledger diff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <div>
+        <div class="brand-name">Reconcile</div>
+        <div class="brand-tag">bank ledger vs. merchant ledger, diffed continuously</div>
+      </div>
+    </div>
+    <button id="inject-btn" class="btn-inject">Inject a dropped webhook →</button>
+  </header>
+
+  <main>
+    <section class="stat-strip" id="stat-strip">
+      <div class="stat">
+        <div class="stat-label">total transactions scanned</div>
+        <div class="stat-value" id="stat-total">—</div>
+      </div>
+      <div class="stat found">
+        <div class="stat-label">ghost revenue found</div>
+        <div class="stat-value" id="stat-found">—</div>
+      </div>
+      <div class="stat recovered">
+        <div class="stat-label">auto-recovered</div>
+        <div class="stat-value" id="stat-recovered">—</div>
+      </div>
+      <div class="stat review">
+        <div class="stat-label">pending human review</div>
+        <div class="stat-value" id="stat-review">—</div>
+      </div>
+      <div class="stat escalated">
+        <div class="stat-label">escalated (possible duplicate)</div>
+        <div class="stat-value" id="stat-escalated">—</div>
+      </div>
+    </section>
+
+    <section class="panel-row">
+      <div class="panel decisions-panel">
+        <div class="panel-head">
+          <h2>Mismatches &amp; decisions</h2>
+          <span class="panel-sub">click a row for the agent's reasoning</span>
+        </div>
+        <div class="table-wrap">
+          <table id="decisions-table">
+            <thead>
+              <tr>
+                <th>ref id</th>
+                <th>amount</th>
+                <th>rail</th>
+                <th>gap</th>
+                <th>confidence</th>
+                <th>action</th>
+              </tr>
+            </thead>
+            <tbody id="decisions-body">
+              <tr><td colspan="6" class="empty-row">loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="panel reasoning-panel">
+        <div class="panel-head">
+          <h2>Agent reasoning</h2>
+          <span class="panel-sub">audit-trail entry</span>
+        </div>
+        <div id="reasoning-body" class="reasoning-body">
+          <p class="empty-hint">Select a row from the table, or hit “inject a dropped webhook” to watch a decision happen live.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel legend-panel">
+      <div class="legend-item high"><span class="dot"></span> confidence ≥ 0.85 — auto-reconciled, no human touch</div>
+      <div class="legend-item medium"><span class="dot"></span> confidence 0.50–0.85 — drafted for a human to confirm</div>
+      <div class="legend-item low"><span class="dot"></span> confidence &lt; 0.50 — escalated, not touched automatically</div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
