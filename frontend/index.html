@@ -44,6 +44,44 @@
       </div>
     </section>
 
+    <section class="impact-row">
+      <div class="panel hero-panel">
+        <div class="panel-head">
+          <h2>Revenue recovered</h2>
+          <span class="panel-sub">before vs. after Reconcile ran</span>
+        </div>
+        <div class="hero-body">
+          <div class="hero-number" id="hero-number">₹0</div>
+          <div class="hero-caption">would have been written off as lost — here's where it actually went</div>
+          <div class="segmented-bar" id="segmented-bar" role="img" aria-label="revenue breakdown by outcome"></div>
+          <div class="segmented-legend">
+            <span class="seg-legend-item found"><i></i>auto-recovered</span>
+            <span class="seg-legend-item review"><i></i>pending review</span>
+            <span class="seg-legend-item escalated"><i></i>escalated</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel donut-panel">
+        <div class="panel-head">
+          <h2>Ghost revenue by rail</h2>
+          <span class="panel-sub">where mismatches cluster</span>
+        </div>
+        <div class="donut-body">
+          <svg id="donut-svg" viewBox="0 0 120 120" class="donut-svg"></svg>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+      </div>
+
+      <div class="panel tier-panel">
+        <div class="panel-head">
+          <h2>Decisions by confidence</h2>
+          <span class="panel-sub">how often the agent acted alone</span>
+        </div>
+        <div class="tier-bars" id="tier-bars"></div>
+      </div>
+    </section>
+
     <section class="panel-row">
       <div class="panel decisions-panel">
         <div class="panel-head">
