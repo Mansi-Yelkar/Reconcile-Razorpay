@@ -49,6 +49,12 @@ def run_pipeline():
 
     decisions = []
     for mismatch in reconciled["mismatch_candidates"]:
+        # guard: duplicate-charge rows must never reach the scorer. they
+        # belong in unmatched_bank_rows (no ref_id match at all), but this
+        # assert catches it early if the engine's bucketing logic ever
+        # regresses — auto-approving a possible duplicate is the one
+        # failure mode this project can't afford.
+        assert "time_gap_seconds" in mismatch, "malformed mismatch reached scorer"
         confidence = scorer.score(mismatch["time_gap_seconds"], mismatch["has_close_sibling"])
         tier = scorer.tier(confidence)
         decision = agent.decide(mismatch, confidence, tier)
