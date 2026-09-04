@@ -321,7 +321,14 @@ def api_simulate_scenario(scenario):
 
 @app.route("/api/audit", methods=["GET"])
 def api_audit_log():
-    limit = int(request.args.get("limit", 200))
+    raw_limit = request.args.get("limit", "200")
+    try:
+        limit = int(raw_limit)
+    except (TypeError, ValueError):
+        return jsonify({"error": "limit must be a positive integer"}), 400
+    if limit < 1 or limit > 1000:
+        return jsonify({"error": "limit must be between 1 and 1000"}), 400
+
     events = db.all_audit_events(limit=limit)
     return jsonify(events)
 
@@ -330,8 +337,13 @@ def api_audit_log():
 
 @app.route("/api/evaluation/run", methods=["POST"])
 def api_run_evaluation():
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
     events_count = data.get("events", 10000)
+    if isinstance(events_count, bool) or not isinstance(events_count, int):
+        return jsonify({"error": "events must be an integer"}), 400
+    if events_count < 1 or events_count > 100000:
+        return jsonify({"error": "events must be between 1 and 100000"}), 400
+
     results = run_benchmark(events_count)
     return jsonify(results)
 

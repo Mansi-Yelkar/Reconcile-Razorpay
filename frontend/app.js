@@ -18,6 +18,23 @@ function formatINR(val) {
   }).format(val || 0);
 }
 
+async function apiFetch(url, options) {
+  const response = await fetch(url, options);
+  let payload;
+
+  try {
+    payload = await response.json();
+  } catch (error) {
+    payload = null;
+  }
+
+  if (!response.ok) {
+    throw new Error(payload?.error || payload?.reason || `Request failed (${response.status})`);
+  }
+
+  return payload;
+}
+
 // Tab Switching
 function initTabs() {
   const tabs = document.querySelectorAll('.segmented-tab');
@@ -43,8 +60,7 @@ function initTabs() {
 // Load Dashboard Data
 async function loadDashboardData() {
   try {
-    const res = await fetch('/api/analytics/overview');
-    const data = await res.json();
+    const data = await apiFetch('/api/analytics/overview');
 
     document.getElementById('kpi-at-risk').textContent = formatINR(data.revenue_at_risk);
     document.getElementById('kpi-recovered').textContent = formatINR(data.revenue_recovered);
@@ -62,8 +78,7 @@ async function loadDashboardData() {
 // Load Funnel
 async function loadFunnel(atRisk, recovered) {
   try {
-    const res = await fetch('/api/analytics/funnel');
-    const funnel = await res.json();
+    const funnel = await apiFetch('/api/analytics/funnel');
 
     document.getElementById('funnel-val-risk').textContent = formatINR(funnel.at_risk);
     document.getElementById('funnel-val-eligible').textContent = formatINR(funnel.eligible);
@@ -78,8 +93,7 @@ async function loadFunnel(atRisk, recovered) {
 async function loadRecentCases() {
   const tbody = document.getElementById('tbl-recent-cases');
   try {
-    const res = await fetch('/api/recovery/cases');
-    const cases = await res.json();
+    const cases = await apiFetch('/api/recovery/cases');
 
     if (!cases || cases.length === 0) {
       tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">No recovery cases recorded yet. Click a scenario in Simulation Center.</td></tr>';
@@ -132,8 +146,7 @@ function getStatusBadge(status) {
 async function loadAllCases() {
   const tbody = document.getElementById('tbl-all-cases');
   try {
-    const res = await fetch('/api/recovery/cases');
-    const cases = await res.json();
+    const cases = await apiFetch('/api/recovery/cases');
 
     if (!cases || cases.length === 0) {
       tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">No cases found.</td></tr>';
@@ -174,8 +187,14 @@ function bindRowActionButtons() {
     btn.addEventListener('click', async () => {
       btn.disabled = true;
       btn.textContent = '...';
-      await fetch(`/api/recovery/cases/${btn.dataset.id}/execute`, { method: 'POST' });
-      loadDashboardData();
+      try {
+        await apiFetch(`/api/recovery/cases/${btn.dataset.id}/execute`, { method: 'POST' });
+        await loadDashboardData();
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Execute';
+        alert(`Recovery execution failed: ${err.message}`);
+      }
     });
   });
 
@@ -183,9 +202,15 @@ function bindRowActionButtons() {
     btn.addEventListener('click', async () => {
       btn.disabled = true;
       btn.textContent = '...';
-      await fetch(`/api/recovery/cases/${btn.dataset.id}/approve`, { method: 'POST' });
-      loadDashboardData();
-      loadAllCases();
+      try {
+        await apiFetch(`/api/recovery/cases/${btn.dataset.id}/approve`, { method: 'POST' });
+        await loadDashboardData();
+        await loadAllCases();
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Approve';
+        alert(`Approval failed: ${err.message}`);
+      }
     });
   });
 
@@ -193,9 +218,15 @@ function bindRowActionButtons() {
     btn.addEventListener('click', async () => {
       btn.disabled = true;
       btn.textContent = '...';
-      await fetch(`/api/recovery/cases/${btn.dataset.id}/stop`, { method: 'POST' });
-      loadDashboardData();
-      loadAllCases();
+      try {
+        await apiFetch(`/api/recovery/cases/${btn.dataset.id}/stop`, { method: 'POST' });
+        await loadDashboardData();
+        await loadAllCases();
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Stop';
+        alert(`Stopping case failed: ${err.message}`);
+      }
     });
   });
 }
@@ -211,8 +242,7 @@ async function openCaseModal(caseId) {
   modal.classList.add('open');
 
   try {
-    const res = await fetch(`/api/recovery/cases/${caseId}`);
-    const data = await res.json();
+    const data = await apiFetch(`/api/recovery/cases/${caseId}`);
     const c = data.case;
 
     body.innerHTML = `
@@ -291,8 +321,7 @@ async function runSimulationScenario(scenario) {
   await delay(250);
 
   try {
-    const res = await fetch(`/api/simulate/${scenario}`, { method: 'POST' });
-    const data = await res.json();
+    const data = await apiFetch(`/api/simulate/${scenario}`, { method: 'POST' });
     const c = data.case;
 
     // Step 4: Policy Check
@@ -409,8 +438,7 @@ function delay(ms) {
 async function loadAuditLog() {
   const tbody = document.getElementById('tbl-audit-events');
   try {
-    const res = await fetch('/api/audit');
-    const events = await res.json();
+    const events = await apiFetch('/api/audit');
 
     if (!events || events.length === 0) {
       tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">No audit events recorded yet.</td></tr>';
@@ -468,12 +496,11 @@ function bindQuickHeaderActions() {
     }
 
     try {
-      const res = await fetch('/api/evaluation/run', {
+      const data = await apiFetch('/api/evaluation/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ events: 10000 })
       });
-      const data = await res.json();
       const recRecovered = data.reconcile_recovered || data.reconcilex_recovered || 0;
 
       if (container) {
@@ -555,6 +582,20 @@ function bindQuickHeaderActions() {
   const quickEval = document.getElementById('btn-quick-run-eval');
   if (quickEval) quickEval.addEventListener('click', runEval);
 
+  const refreshDashboard = document.getElementById('btn-refresh-dashboard');
+  if (refreshDashboard) {
+    refreshDashboard.addEventListener('click', async () => {
+      refreshDashboard.disabled = true;
+      refreshDashboard.textContent = 'Refreshing...';
+      try {
+        await loadDashboardData();
+      } finally {
+        refreshDashboard.disabled = false;
+        refreshDashboard.textContent = '🔄 Refresh Stream';
+      }
+    });
+  }
+
   const evalTabBtn = document.getElementById('btn-run-eval-tab');
   if (evalTabBtn) evalTabBtn.addEventListener('click', runEval);
 }
@@ -583,8 +624,12 @@ function bindSearchAndFilters() {
 }
 
 function filterCasesTable() {
-  const query = (document.getElementById('input-case-search').value || '').toLowerCase();
-  const statusFilter = document.getElementById('select-status-filter').value;
+  const searchInput = document.getElementById('input-case-search');
+  const filterSelect = document.getElementById('select-status-filter');
+  if (!searchInput || !filterSelect) return;
+
+  const query = (searchInput.value || '').toLowerCase();
+  const statusFilter = filterSelect.value;
   const rows = document.querySelectorAll('#tbl-all-cases tr');
 
   rows.forEach(row => {

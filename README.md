@@ -3,8 +3,9 @@ title: Reconcile Razorpay
 emoji: ⚡
 colorFrom: green
 colorTo: yellow
-sdk: docker
-app_port: 7860
+sdk: gradio
+sdk_version: 6.26.0
+app_file: app.py
 pinned: false
 ---
 
@@ -184,15 +185,14 @@ pip install -r requirements.txt
 
 ### 3. Run Application & Command Center
 ```bash
-python backend/app.py
+python app.py
 ```
-Open your browser at **`http://localhost:5050`** to access the **Reconcile Command Center**.
+Open your browser at **`http://localhost:7860`** to access the **Reconcile Command Center**.
 
 ---
 
-## Deployment to Hugging Face Spaces
+## Deployment on Hugging Face Spaces
 
-This application is configured for deployment to **Hugging Face Spaces**:
-- **Space URL:** `https://huggingface.co/spaces/Mansi-Yelkar/Reconcile-Razorpay`
-- **SDK:** Docker
-- **Port:** 7860
+Hosted live on **Hugging Face Spaces**:
+- **Space URL:** [Mansi-Yelkar/Reconcile-Razorpay](https://huggingface.co/spaces/Mansi-Yelkar/Reconcile-Razorpay)
+- **Direct Web URL:** [https://mansi-yelkar-reconcile-razorpay.hf.space](https://mansi-yelkar-reconcile-razorpay.hf.space)
