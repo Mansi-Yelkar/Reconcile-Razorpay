@@ -1,13 +1,3 @@
----
-title: Reconcile Razorpay
-emoji: ⚡
-colorFrom: green
-colorTo: yellow
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Reconcile — AI Revenue Recovery Orchestrator
 
 > **Razorpay AI Buildathon — Track 3: AI Revenue Recovery**  
