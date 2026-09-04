@@ -19,7 +19,11 @@ function formatINR(val) {
 }
 
 async function apiFetch(url, options) {
-  const response = await fetch(url, options);
+  let targetUrl = url;
+  if (window.location.pathname.startsWith('/app') && url.startsWith('/api/')) {
+    targetUrl = '/app' + url;
+  }
+  const response = await fetch(targetUrl, options);
   let payload;
 
   try {

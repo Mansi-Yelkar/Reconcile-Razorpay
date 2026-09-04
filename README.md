@@ -1,3 +1,14 @@
+---
+title: Reconcile Razorpay
+emoji: ⚡
+colorFrom: green
+colorTo: yellow
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+---
+
 # Reconcile — AI Revenue Recovery Orchestrator
 
 > **Razorpay AI Buildathon — Track 3: AI Revenue Recovery**  
@@ -165,8 +176,8 @@ Evaluated via `evaluation/run_experiment.py --events 10000`:
 ### 2. Installation
 ```bash
 # Clone repository
-git clone https://github.com/reconcile/reconcile.git
-cd reconcile
+git clone https://github.com/Mansi-Yelkar/Reconcile-Razorpay.git
+cd Reconcile-Razorpay
 
 # Install dependencies
 pip install -r requirements.txt
@@ -180,8 +191,9 @@ Open your browser at **`http://localhost:7860`** to access the **Reconcile Comma
 
 ---
 
-## Deployment on Hugging Face Spaces
+## Live Deployment Links
 
 Hosted live on **Hugging Face Spaces**:
 - **Space URL:** [Mansi-Yelkar/Reconcile-Razorpay](https://huggingface.co/spaces/Mansi-Yelkar/Reconcile-Razorpay)
 - **Direct Web URL:** [https://mansi-yelkar-reconcile-razorpay.hf.space](https://mansi-yelkar-reconcile-razorpay.hf.space)
+- **GitHub Repository:** [Mansi-Yelkar/Reconcile-Razorpay](https://github.com/Mansi-Yelkar/Reconcile-Razorpay)
