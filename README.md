@@ -1,12 +1,3 @@
----
-title: Reconcile Razorpay
-emoji: ⚡
-colorFrom: green
-colorTo: yellow
-sdk: gradio
-app_file: app.py
-pinned: false
----
 
 # Reconcile — AI Revenue Recovery Orchestrator
 
@@ -192,7 +183,5 @@ Open your browser at **`http://localhost:7860`** to access the **Reconcile Comma
 
 ## Live Deployment Links
 
-Hosted live on **Hugging Face Spaces**:
-- **Space URL:** [Mansi-Yelkar/Reconcile-Razorpay](https://huggingface.co/spaces/Mansi-Yelkar/Reconcile-Razorpay)
-- **Direct Web URL:** [https://mansi-yelkar-reconcile-razorpay.hf.space](https://mansi-yelkar-reconcile-razorpay.hf.space)
+- **Direct Web URL:** [https://mansi-yelkar-reconcile-razorpay.hf.space]([https://mansi-yelkar-reconcile-razorpay.hf.space](https://reconcile-razorpay.vercel.app/))
 - **GitHub Repository:** [Mansi-Yelkar/Reconcile-Razorpay](https://github.com/Mansi-Yelkar/Reconcile-Razorpay)
