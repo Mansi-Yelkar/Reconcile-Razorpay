@@ -13,7 +13,10 @@ from contextlib import contextmanager
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "reconcile.db")
+if os.environ.get("VERCEL"):
+    DB_PATH = "/tmp/reconcile.db"
+else:
+    DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "reconcile.db")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS payments (
