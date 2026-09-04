@@ -183,5 +183,5 @@ Open your browser at **`http://localhost:7860`** to access the **Reconcile Comma
 
 ## Live Deployment Links
 
-- **Direct Web URL:** [https://mansi-yelkar-reconcile-razorpay.hf.space]([https://mansi-yelkar-reconcile-razorpay.hf.space](https://reconcile-razorpay.vercel.app/))
+- **Direct Web URL:** https://reconcile-razorpay.vercel.app/
 - **GitHub Repository:** [Mansi-Yelkar/Reconcile-Razorpay](https://github.com/Mansi-Yelkar/Reconcile-Razorpay)
