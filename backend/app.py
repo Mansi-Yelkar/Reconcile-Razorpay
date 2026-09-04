@@ -53,9 +53,15 @@ FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 
 
+_DB_INITIALIZED = False
+
+
 @app.before_request
 def ensure_db():
-    db.init_db()
+    global _DB_INITIALIZED
+    if not _DB_INITIALIZED:
+        db.init_db()
+        _DB_INITIALIZED = True
 
 
 # --- ANALYTICS ENDPOINTS ---

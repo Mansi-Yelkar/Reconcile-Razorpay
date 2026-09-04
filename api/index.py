@@ -16,10 +16,3 @@ if BACKEND_DIR not in sys.path:
     sys.path.insert(0, BACKEND_DIR)
 
 from backend.app import app
-
-# Safe cold-start database initialization
-try:
-    from backend.db import init_db
-    init_db()
-except Exception as err:
-    print(f"[Vercel Cold Start] SQLite init warning: {err}", flush=True)
