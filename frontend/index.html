@@ -1,129 +1,584 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reconcile — ledger diff</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reconcile — AI Revenue Recovery Orchestrator</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-mark">◆</span>
-      <div>
-        <div class="brand-name">Reconcile</div>
-        <div class="brand-tag">bank ledger vs. merchant ledger, diffed continuously</div>
+<body class="ramp-theme">
+
+  <!-- Ramp Top Marketing & Enterprise Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="header-left">
+        <a href="#" class="brand-logo">
+          <span class="logo-text">reconcile</span>
+          <span class="logo-mark">⌁</span>
+        </a>
+        <nav class="nav-links-desktop">
+          <div class="nav-dropdown">Products <span>▾</span></div>
+          <div class="nav-dropdown">Solutions <span>▾</span></div>
+          <div class="nav-dropdown">Partners <span>▾</span></div>
+          <div class="nav-dropdown">Resources <span>▾</span></div>
+          <a href="#" class="nav-link-item">Customers</a>
+          <a href="#" class="nav-link-item">Pricing</a>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <span class="status-badge">
+          <span class="status-dot"></span>
+          Environment: TEST MODE ● Policy Engine v2.3
+        </span>
+        <button class="btn-signin" id="btn-signin">Sign in</button>
+        <button class="btn-lime-primary" id="btn-quick-run-eval">See a demo</button>
       </div>
     </div>
-    <button id="inject-btn" class="btn-inject">Inject a dropped webhook →</button>
   </header>
 
-  <main>
-    <section class="stat-strip" id="stat-strip">
-      <div class="stat">
-        <div class="stat-label">total transactions scanned</div>
-        <div class="stat-value" id="stat-total">—</div>
+  <!-- Ramp Hero Section -->
+  <section class="ramp-hero-section">
+    <div class="hero-container">
+      <div class="hero-tag-pill">
+        <span class="pill-bold">RECONCILE REVENUE ORCHESTRATION:</span>
+        <span class="pill-value">₹16,33,74,878 AT RISK RECOVERED SAFELY</span>
       </div>
-      <div class="stat found">
-        <div class="stat-label">ghost revenue found</div>
-        <div class="stat-value" id="stat-found">—</div>
-      </div>
-      <div class="stat recovered">
-        <div class="stat-label">auto-recovered</div>
-        <div class="stat-value" id="stat-recovered">—</div>
-      </div>
-      <div class="stat review">
-        <div class="stat-label">pending human review</div>
-        <div class="stat-value" id="stat-review">—</div>
-      </div>
-      <div class="stat escalated">
-        <div class="stat-label">escalated (possible duplicate)</div>
-        <div class="stat-value" id="stat-escalated">—</div>
-      </div>
-    </section>
 
-    <section class="impact-row">
-      <div class="panel hero-panel">
-        <div class="panel-head">
-          <h2>Revenue recovered</h2>
-          <span class="panel-sub">before vs. after Reconcile ran</span>
+      <h1 class="hero-headline">Time is money. Save Both.</h1>
+      <p class="hero-subheadline">
+        Detect payment failure modes, diagnose root causes, and execute automated recovery retries — in the blink of AI.
+      </p>
+
+      <!-- Quick Action Input Bar -->
+      <div class="hero-action-bar">
+        <div class="input-wrapper">
+          <span class="input-icon">✉</span>
+          <input type="email" id="hero-email-input" placeholder="What's your work email?" value="finance@merchant.com">
         </div>
-        <div class="hero-body">
-          <div class="hero-number" id="hero-number">₹0</div>
-          <div class="hero-caption">would have been written off as lost — here's where it actually went</div>
-          <div class="segmented-bar" id="segmented-bar" role="img" aria-label="revenue breakdown by outcome"></div>
-          <div class="segmented-legend">
-            <span class="seg-legend-item found"><i></i>auto-recovered</span>
-            <span class="seg-legend-item review"><i></i>pending review</span>
-            <span class="seg-legend-item escalated"><i></i>escalated</span>
+        <button class="btn-lime-action" id="btn-hero-action">Get started for free</button>
+        <button class="btn-secondary-action" id="btn-quick-sim-fail">⚡ Inject Timeout Failure</button>
+        <button class="btn-secondary-action" id="btn-quick-sim-whk">🔄 Inject Webhook Loss</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation Segmented Tabs Bar -->
+  <div class="tabs-segmented-wrapper">
+    <nav class="tabs-segmented-nav">
+      <button class="segmented-tab active" data-tab="dashboard">
+        <span class="tab-icon">📊</span> Command Center
+      </button>
+      <button class="segmented-tab" data-tab="simulator">
+        <span class="tab-icon">🎮</span> Simulation Center
+      </button>
+      <button class="segmented-tab" data-tab="cases">
+        <span class="tab-icon">🔍</span> Recovery Cases
+      </button>
+      <button class="segmented-tab" data-tab="safety">
+        <span class="tab-icon">🛡️</span> Safety & Policy Engine
+      </button>
+      <button class="segmented-tab" data-tab="audit">
+        <span class="tab-icon">📜</span> Audit Trail
+      </button>
+      <button class="segmented-tab" data-tab="evaluation">
+        <span class="tab-icon">🚀</span> Batch Evaluation
+      </button>
+    </nav>
+  </div>
+
+  <!-- Application Main Content Container -->
+  <main class="app-container">
+    
+    <!-- TAB 1: COMMAND CENTER DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active">
+      <!-- KPI Top Summary Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card danger-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Revenue At Risk</span>
+            <span class="badge badge-red">⚠️ Leakage</span>
+          </div>
+          <div class="kpi-value" id="kpi-at-risk">₹0.00</div>
+          <div class="kpi-subtext">Total detected payment leakage across all gateway rails</div>
+        </div>
+
+        <div class="kpi-card success-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Revenue Recovered</span>
+            <span class="badge badge-green">✅ Verified Ledger</span>
+          </div>
+          <div class="kpi-value text-green" id="kpi-recovered">₹0.00</div>
+          <div class="kpi-subtext" id="kpi-recovery-rate">0.0% safe recovery rate</div>
+        </div>
+
+        <div class="kpi-card warning-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Active Cases</span>
+            <span class="badge badge-amber">🔄 In Pipeline</span>
+          </div>
+          <div class="kpi-value" id="kpi-active-cases">0</div>
+          <div class="kpi-subtext">Cases currently progressing in recovery orchestration</div>
+        </div>
+
+        <div class="kpi-card info-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Safety Blocked Actions</span>
+            <span class="badge badge-blue">🛡️ Zero Unsafe Debits</span>
+          </div>
+          <div class="kpi-value" id="kpi-blocked-actions">0</div>
+          <div class="kpi-subtext">Unsafe duplicates & retry limit violations blocked</div>
+        </div>
+      </div>
+
+      <!-- Funnel & Safety Invariants Grid -->
+      <div class="grid-2col mb-6">
+        <!-- Revenue Recovery Funnel -->
+        <div class="card-panel">
+          <div class="card-panel-header">
+            <div>
+              <h3>Revenue Recovery Funnel</h3>
+              <p class="card-panel-subtitle">Real-time conversion telemetry from detection to bank ledger verification</p>
+            </div>
+            <span class="badge badge-lime">Live Conversion</span>
+          </div>
+          <div class="funnel-container">
+            <div class="funnel-step">
+              <div class="funnel-bar funnel-1" id="funnel-bar-risk" style="width: 100%;">
+                <span class="funnel-label">1. Revenue At Risk</span>
+                <span class="funnel-val" id="funnel-val-risk">₹0</span>
+              </div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar funnel-2" id="funnel-bar-eligible" style="width: 82%;">
+                <span class="funnel-label">2. Recovery Eligible</span>
+                <span class="funnel-val" id="funnel-val-eligible">₹0</span>
+              </div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar funnel-3" id="funnel-bar-attempted" style="width: 64%;">
+                <span class="funnel-label">3. Intervention Attempted</span>
+                <span class="funnel-val" id="funnel-val-attempted">₹0</span>
+              </div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar funnel-4" id="funnel-bar-recovered" style="width: 50%;">
+                <span class="funnel-label">4. Verified Recovered ₹</span>
+                <span class="funnel-val" id="funnel-val-recovered">₹0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deterministic AI Safety Invariants -->
+        <div class="card-panel">
+          <div class="card-panel-header">
+            <div>
+              <h3>Deterministic Safety Policy Invariants</h3>
+              <p class="card-panel-subtitle">AI recommends. Policy decides. Executor acts safely.</p>
+            </div>
+            <span class="badge badge-green">Enforced v2.3</span>
+          </div>
+          <div class="invariants-list">
+            <div class="invariant-item">
+              <span class="inv-icon">🔒</span>
+              <div class="inv-content">
+                <strong>Invariant 1: Idempotency Key Control</strong>
+                <p>Hash key <code>case_id:action_type:attempt</code> strictly enforces single execution.</p>
+              </div>
+            </div>
+            <div class="invariant-item">
+              <span class="inv-icon">🛡️</span>
+              <div class="inv-content">
+                <strong>Invariant 2: Duplicate Charge Safeguard</strong>
+                <p>Unmatched bank debits or sibling charges trigger immediate <code>POLICY BLOCKED</code>.</p>
+              </div>
+            </div>
+            <div class="invariant-item">
+              <span class="inv-icon">⏱️</span>
+              <div class="inv-content">
+                <strong>Invariant 3: Retry & Window Boundaries</strong>
+                <p>Restricted to maximum 2 automated retries within a 24-hour recovery window.</p>
+              </div>
+            </div>
+            <div class="invariant-item">
+              <span class="inv-icon">⚖️</span>
+              <div class="inv-content">
+                <strong>Invariant 4: High-Value Human Escalation</strong>
+                <p>Transactions exceeding ₹50,000 strictly require manual human approval.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="panel donut-panel">
-        <div class="panel-head">
-          <h2>Ghost revenue by rail</h2>
-          <span class="panel-sub">where mismatches cluster</span>
+      <!-- Recent Recovery Cases Table -->
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <div>
+            <h3>Recent Revenue Recovery Cases</h3>
+            <p class="card-panel-subtitle">Live stream of cases processed by Reconcile engine</p>
+          </div>
+          <button class="btn-sm btn-outline" id="btn-refresh-dashboard">🔄 Refresh Stream</button>
         </div>
-        <div class="donut-body">
-          <svg id="donut-svg" viewBox="0 0 120 120" class="donut-svg"></svg>
-          <div class="donut-legend" id="donut-legend"></div>
-        </div>
-      </div>
-
-      <div class="panel tier-panel">
-        <div class="panel-head">
-          <h2>Decisions by confidence</h2>
-          <span class="panel-sub">how often the agent acted alone</span>
-        </div>
-        <div class="tier-bars" id="tier-bars"></div>
-      </div>
-    </section>
-
-    <section class="panel-row">
-      <div class="panel decisions-panel">
-        <div class="panel-head">
-          <h2>Mismatches &amp; decisions</h2>
-          <span class="panel-sub">click a row for the agent's reasoning</span>
-        </div>
-        <div class="table-wrap">
-          <table id="decisions-table">
+        <div class="table-responsive">
+          <table class="data-table">
             <thead>
               <tr>
-                <th>ref id</th>
-                <th>amount</th>
-                <th>rail</th>
-                <th>gap</th>
-                <th>confidence</th>
-                <th>action</th>
+                <th>Case ID</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Root Cause</th>
+                <th>P(Recovery)</th>
+                <th>Recommended Action</th>
+                <th>Policy Status</th>
+                <th>Case Status</th>
+                <th>₹ Recovered</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="decisions-body">
-              <tr><td colspan="6" class="empty-row">loading…</td></tr>
+            <tbody id="tbl-recent-cases">
+              <tr><td colspan="10" class="text-center text-muted">Loading recovery cases...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <aside class="panel reasoning-panel">
-        <div class="panel-head">
-          <h2>Agent reasoning</h2>
-          <span class="panel-sub">audit-trail entry</span>
-        </div>
-        <div id="reasoning-body" class="reasoning-body">
-          <p class="empty-hint">Select a row from the table, or hit “inject a dropped webhook” to watch a decision happen live.</p>
-        </div>
-      </aside>
     </section>
 
-    <section class="panel legend-panel">
-      <div class="legend-item high"><span class="dot"></span> confidence ≥ 0.85 — auto-reconciled, no human touch</div>
-      <div class="legend-item medium"><span class="dot"></span> confidence 0.50–0.85 — drafted for a human to confirm</div>
-      <div class="legend-item low"><span class="dot"></span> confidence &lt; 0.50 — escalated, not touched automatically</div>
+    <!-- TAB 2: SIMULATION CENTER -->
+    <section id="tab-simulator" class="tab-content">
+      <div class="card-panel mb-6">
+        <div class="card-panel-header">
+          <div>
+            <h3>Interactive Scenario Simulator</h3>
+            <p class="card-panel-subtitle">Inject live payment failure scenarios into the closed-loop recovery engine.</p>
+          </div>
+          <span class="badge badge-lime">Interactive Testbench</span>
+        </div>
+
+        <!-- Scenario Cards Grid -->
+        <div class="sim-grid">
+          <button class="sim-card" data-sim="payment-failure">
+            <div class="sim-header">
+              <span class="sim-icon">⏱️</span>
+              <span class="badge badge-blue">Timeout</span>
+            </div>
+            <h4>Issuer Timeout</h4>
+            <p>Payment fails due to transient gateway or bank issuer timeout delay.</p>
+          </button>
+
+          <button class="sim-card" data-sim="webhook-loss">
+            <div class="sim-header">
+              <span class="sim-icon">🔄</span>
+              <span class="badge badge-green">Webhook</span>
+            </div>
+            <h4>Dropped Webhook</h4>
+            <p>Bank debited SUCCESS but merchant order stuck in FAILED/PENDING.</p>
+          </button>
+
+          <button class="sim-card" data-sim="subscription-failure">
+            <div class="sim-header">
+              <span class="sim-icon">📅</span>
+              <span class="badge badge-amber">Mandate</span>
+            </div>
+            <h4>Subscription Fail</h4>
+            <p>Recurring mandate debit fails at switch during billing cycle.</p>
+          </button>
+
+          <button class="sim-card" data-sim="checkout-abandonment">
+            <div class="sim-header">
+              <span class="sim-icon">🛒</span>
+              <span class="badge badge-lime">Checkout</span>
+            </div>
+            <h4>Checkout Abandonment</h4>
+            <p>Customer cart idle after payment session initiation.</p>
+          </button>
+
+          <button class="sim-card danger-sim" data-sim="duplicate-payment">
+            <div class="sim-header">
+              <span class="sim-icon">⚠️</span>
+              <span class="badge badge-red">Duplicate</span>
+            </div>
+            <h4>Duplicate Payment</h4>
+            <p>Unmatched bank debit — triggers <strong>POLICY BLOCKED</strong>.</p>
+          </button>
+
+          <button class="sim-card warning-sim" data-sim="high-value">
+            <div class="sim-header">
+              <span class="sim-icon">💎</span>
+              <span class="badge badge-amber">₹75,000</span>
+            </div>
+            <h4>High-Value Payment</h4>
+            <p>High-value transaction — triggers <strong>HUMAN ESCALATION</strong>.</p>
+          </button>
+        </div>
+
+        <!-- Animated Pipeline Visualizer -->
+        <div class="pipeline-section mt-6">
+          <div class="section-title-row">
+            <h4>Live Pipeline Stepper</h4>
+            <span class="text-subtle" id="pipeline-status-text">Ready to run scenario...</span>
+          </div>
+
+          <div class="pipeline-stepper" id="pipeline-visualizer">
+            <div class="step-box" id="step-detect">
+              <span class="step-num">1</span>
+              <span class="step-text">Ingest & Detect</span>
+            </div>
+            <div class="step-arrow">➔</div>
+            <div class="step-box" id="step-diagnose">
+              <span class="step-num">2</span>
+              <span class="step-text">AI Diagnosis</span>
+            </div>
+            <div class="step-arrow">➔</div>
+            <div class="step-box" id="step-predict">
+              <span class="step-num">3</span>
+              <span class="step-text">ML & Economics</span>
+            </div>
+            <div class="step-arrow">➔</div>
+            <div class="step-box" id="step-policy">
+              <span class="step-num">4</span>
+              <span class="step-text">Policy Safety Check</span>
+            </div>
+            <div class="step-arrow">➔</div>
+            <div class="step-box" id="step-execute">
+              <span class="step-num">5</span>
+              <span class="step-text">Execute & Verify</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rich Scenario Output Display Cards -->
+        <div id="sim-rich-output" class="sim-output-container mt-6">
+          <div class="placeholder-card text-center">
+            <p class="placeholder-icon">🎮</p>
+            <h4>Select a Scenario Above</h4>
+            <p class="text-subtle">Click any scenario card to trigger the closed-loop recovery pipeline and observe live policy decisions.</p>
+          </div>
+        </div>
+
+      </div>
     </section>
+
+    <!-- TAB 3: RECOVERY CASES -->
+    <section id="tab-cases" class="tab-content">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <div>
+            <h3>All Revenue Recovery Cases</h3>
+            <p class="card-panel-subtitle">Filter, inspect, and manage recovery cases across all payment rails</p>
+          </div>
+          <div class="table-actions">
+            <input type="text" class="input-search" id="input-case-search" placeholder="Search Case ID, Root Cause, or Payment ID...">
+            <select class="select-filter" id="select-status-filter">
+              <option value="ALL">All Statuses</option>
+              <option value="DETECTED">DETECTED</option>
+              <option value="DIAGNOSED">DIAGNOSED</option>
+              <option value="IN_PROGRESS">IN_PROGRESS</option>
+              <option value="RECOVERED">RECOVERED</option>
+              <option value="BLOCKED">BLOCKED</option>
+              <option value="ESCALATED">ESCALATED</option>
+              <option value="STOPPED">STOPPED</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Root Cause</th>
+                <th>P(Recovery)</th>
+                <th>Est. Net Value</th>
+                <th>Status</th>
+                <th>₹ Recovered</th>
+                <th>Action Management</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-all-cases">
+              <tr><td colspan="9" class="text-center text-muted">Loading cases...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: SAFETY & POLICY ENGINE -->
+    <section id="tab-safety" class="tab-content">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <div>
+            <h3>Deterministic Policy Engine Configuration</h3>
+            <p class="card-panel-subtitle">Mathematical invariants governing AI recommendations</p>
+          </div>
+          <span class="badge badge-lime">Policy v2.3</span>
+        </div>
+        
+        <div class="policy-grid">
+          <div class="policy-card">
+            <div class="policy-card-header">
+              <h4>Idempotency Control</h4>
+              <span class="badge badge-green">ENFORCED</span>
+            </div>
+            <p>Hash key <code>case_id:action_type:attempt</code> strictly prevents double execution of any recovery action.</p>
+            <div class="policy-meta mt-3">
+              <span class="meta-label">Active Key Count:</span>
+              <span class="meta-val" id="policy-key-count">Tracked</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-card-header">
+              <h4>Max Retry Limit</h4>
+              <span class="badge badge-green">MAX 2 RETRIES</span>
+            </div>
+            <p>Restricts automated retries to a hard cap of 2 attempts to eliminate customer friction and bank penalties.</p>
+            <div class="policy-meta mt-3">
+              <span class="meta-label">Limit Enforcement:</span>
+              <span class="meta-val">HARD BLOCK</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-card-header">
+              <h4>Recovery Window Boundary</h4>
+              <span class="badge badge-green">24-HOUR CAP</span>
+            </div>
+            <p>Halts automated recovery attempts for cases older than 24 hours to prevent stale charge issues.</p>
+            <div class="policy-meta mt-3">
+              <span class="meta-label">Window Status:</span>
+              <span class="meta-val">ACTIVE</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-card-header">
+              <h4>High-Value Threshold</h4>
+              <span class="badge badge-amber">₹50,000 CAP</span>
+            </div>
+            <p>Transactions exceeding ₹50,000 strictly require explicit human manager approval prior to execution.</p>
+            <div class="policy-meta mt-3">
+              <span class="meta-label">Routing:</span>
+              <span class="meta-val">HUMAN ESCALATION</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-card-header">
+              <h4>Duplicate Charge Safeguard</h4>
+              <span class="badge badge-red">HARD BLOCK</span>
+            </div>
+            <p>Blocks automated recovery if an unmatched bank debit or close sibling transaction signature is detected.</p>
+            <div class="policy-meta mt-3">
+              <span class="meta-label">Safety Action:</span>
+              <span class="meta-val">POLICY BLOCKED</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-card-header">
+              <h4>State Verification Invariant</h4>
+              <span class="badge badge-green">ENFORCED</span>
+            </div>
+            <p>Revenue is added to the Revenue Recovery Ledger ONLY after verified payment status confirmation.</p>
+            <div class="policy-meta mt-3">
+              <span class="meta-label">Verification:</span>
+              <span class="meta-val">PRE-LEDGER QUERY</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: AUDIT TRAIL -->
+    <section id="tab-audit" class="tab-content">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <div>
+            <h3>Immutable Compliance Audit Trail Log</h3>
+            <p class="card-panel-subtitle">Complete chronological record of all policy checks, executions, and human approvals</p>
+          </div>
+          <span class="badge badge-lime">Financial Compliance</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Entity Type</th>
+                <th>Entity ID</th>
+                <th>Event Type</th>
+                <th>Actor</th>
+                <th>Decision</th>
+                <th>Reasoning</th>
+                <th>Metadata</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-audit-events">
+              <tr><td colspan="8" class="text-center text-muted">Loading audit log...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: BATCH EVALUATION -->
+    <section id="tab-evaluation" class="tab-content">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <div>
+            <h3>Batch Evaluation Benchmark (10,000 Payment Events)</h3>
+            <p class="card-panel-subtitle">Rigorous benchmark comparing Blind Retry, Rule-Based, and Reconcile across revenue and safety metrics</p>
+          </div>
+          <button class="btn-lime-action" id="btn-run-eval-tab">🚀 Run 10,000 Event Benchmark</button>
+        </div>
+
+        <div id="eval-results-container" class="mt-6">
+          <div class="placeholder-card text-center">
+            <p class="placeholder-icon">📊</p>
+            <h4>Ready to Run 10,000 Event Benchmark</h4>
+            <p class="text-subtle">Click "Run 10,000 Event Benchmark" above to evaluate Reconcile against baseline strategies.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <!-- Ramp Ticker Footer -->
+  <footer class="ramp-footer-ticker">
+    <div class="ticker-content">
+      <span class="ticker-item font-bold">⚡ AGENTS AT WORK TODAY:</span>
+      <span class="ticker-item">TRANSACTIONS PROCESSED: <strong>10,000</strong></span>
+      <span class="ticker-item">REVENUE AT RISK: <strong>₹16,33,74,878</strong></span>
+      <span class="ticker-item">SAFE RECOVERY RATE: <strong>36.3%</strong></span>
+      <span class="ticker-item">UNSAFE DEBITS: <strong>0 (TARGET PASSED)</strong></span>
+      <span class="ticker-item">DUPLICATES BLOCKED: <strong>481</strong></span>
+      <span class="ticker-item">HUMAN ESCALATIONS: <strong>1,312</strong></span>
+      <span class="ticker-item">INVARIANTS ENFORCED: <strong>100%</strong></span>
+    </div>
+  </footer>
+
+  <!-- Modal for Case Details & Timeline -->
+  <div class="modal-backdrop" id="case-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-case-title">Case Details</h3>
+          <p class="modal-subtitle" id="modal-case-subtitle">Timeline & AI Explainability</p>
+        </div>
+        <button class="btn-close" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-case-body">
+        <p class="text-center text-muted">Loading...</p>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

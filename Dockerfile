@@ -1,0 +1,16 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Grant full read/write permissions to /app for Hugging Face Spaces (UID 1000)
+RUN chmod -R 777 /app
+
+EXPOSE 7860
+ENV PORT=7860
+
+CMD ["python", "backend/app.py"]

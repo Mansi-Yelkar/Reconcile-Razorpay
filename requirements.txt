@@ -1,3 +1,5 @@
 Flask==3.0.3
 scikit-learn==1.5.1
 numpy==1.26.4
+pydantic==2.8.2
+pytest==8.2.2

@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  reconcile:
+    build: .
+    ports:
+      - "5050:5050"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=TEST_MODE
+    volumes:
+      - ./data:/app/data
